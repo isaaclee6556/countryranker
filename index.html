@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which Country Is Best To Live In — Team 003</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f4f0; color: #1a1a1a; min-height: 100vh; }
+header { background: #1a1a1a; color: #fff; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: flex-end; }
+header h1 { font-size: 1.25rem; font-weight: 600; }
+header p { font-size: 0.75rem; color: #888; margin-top: 3px; }
+header .team { font-size: 0.75rem; color: #888; text-align: right; }
+.main { max-width: 1180px; margin: 0 auto; padding: 1.5rem; display: grid; grid-template-columns: 360px 1fr; gap: 1.25rem; align-items: start; }
+.panel { background: #fff; border-radius: 10px; border: 1px solid #e8e8e3; padding: 1.25rem; }
+.panel-title { font-size: 10.5px; font-weight: 700; color: #999; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
+.preset-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 1.25rem; }
+.preset-btn { font-size: 12px; padding: 7px 10px; border-radius: 7px; border: 1px solid #ddd; background: #fff; color: #555; cursor: pointer; text-align: center; transition: all 0.15s; }
+.preset-btn:hover { border-color: #aaa; color: #111; }
+.preset-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+.slider-block { margin-bottom: 14px; }
+.slider-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+.slider-label { font-size: 13px; color: #333; }
+.slider-source { font-size: 10px; color: #aaa; font-style: italic; }
+.slider-pct { font-size: 13px; font-weight: 600; color: #1a1a1a; min-width: 36px; text-align: right; }
+input[type=range] { width: 100%; accent-color: #1a1a1a; height: 4px; }
+.weight-total { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f0f0ec; display: flex; justify-content: space-between; font-size: 12px; color: #888; }
+.weight-total span { font-weight: 600; color: #1a1a1a; }
+.filter-bar { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+select { font-size: 12px; padding: 6px 10px; border-radius: 7px; border: 1px solid #ddd; background: #fff; color: #333; cursor: pointer; }
+.rank-table { width: 100%; border-collapse: collapse; }
+.rank-table thead tr { border-bottom: 1px solid #e8e8e3; }
+.rank-table th { font-size: 10.5px; font-weight: 700; color: #aaa; letter-spacing: 0.06em; text-transform: uppercase; padding: 0 10px 10px; text-align: left; }
+.rank-table th.r { text-align: right; }
+.rank-row { border-bottom: 1px solid #f4f4f0; transition: background 0.1s; }
+.rank-row:hover { background: #fafaf8; }
+.rank-row td { padding: 10px 10px; vertical-align: middle; }
+.rnum { font-size: 12px; color: #bbb; font-weight: 600; width: 30px; }
+.cname { font-weight: 600; font-size: 14px; color: #1a1a1a; }
+.cregion { font-size: 11px; color: #aaa; margin-top: 1px; }
+.bar-wrap { width: 100px; }
+.bar-bg { background: #f0f0ec; border-radius: 3px; height: 6px; }
+.bar-fill { background: #1a1a1a; border-radius: 3px; height: 6px; transition: width 0.35s ease; }
+.score-cell { font-size: 13px; font-weight: 600; text-align: right; color: #1a1a1a; }
+.top3 .cname { color: #1a1a1a; }
+.badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 20px; margin-left: 6px; font-weight: 500; vertical-align: middle; }
+.b-eu { background: #e8f0fe; color: #1a56b0; }
+.b-as { background: #fce8e6; color: #c62828; }
+.b-am { background: #e6f4ea; color: #1e6b28; }
+.b-oc { background: #fff8e1; color: #b06800; }
+.b-af { background: #f3e8fd; color: #6a1b9a; }
+.b-me { background: #e8f5e9; color: #2e7d32; }
+.info-box { background: #f8f8f5; border-radius: 8px; padding: 1rem; margin-top: 1.25rem; font-size: 11.5px; color: #666; line-height: 1.6; }
+.info-box strong { color: #333; }
+.method-note { font-size: 11px; color: #aaa; margin-top: 6px; font-style: italic; }
+.top-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 1.25rem; }
+.summary-card { background: #f8f8f5; border-radius: 8px; padding: 10px 12px; text-align: center; }
+.summary-rank { font-size: 18px; font-weight: 700; color: #1a1a1a; }
+.summary-name { font-size: 11px; color: #888; margin-top: 2px; }
+.summary-score { font-size: 11px; font-weight: 600; color: #555; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Which Country Is Best To Live In?</h1>
+    <p>Personalized country rankings using World Happiness Report, HDI &amp; Social Progress Index data</p>
+  </div>
+  <div class="team">Team 003 &nbsp;|&nbsp; Shreya Bhargava · Aryan Bolakond · Sameer Jain · Isaac Lee</div>
+</header>
+
+<div class="main">
+  <!-- The Controls -->
+  <div>
+    <div class="panel">
+      <div class="panel-title">Presets</div>
+      <div class="preset-grid">
+        <button class="preset-btn active" onclick="applyPreset('default',this)">Default</button>
+        <button class="preset-btn" onclick="applyPreset('equal',this)">Equal weights</button>
+        <button class="preset-btn" onclick="applyPreset('economy',this)">Economy first</button>
+        <button class="preset-btn" onclick="applyPreset('health',this)">Health &amp; safety</button>
+        <button class="preset-btn" onclick="applyPreset('happiness',this)">Happiness focused</button>
+        <button class="preset-btn" onclick="applyPreset('education',this)">Education focused</button>
+      </div>
+
+      <div class="panel-title">Factor weights</div>
+      <div id="sliders"></div>
+
+      <div class="weight-total">
+        Total weight: <span id="totalWeight">100%</span>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-top:1rem;">
+      <strong>Data sources</strong><br>
+      <strong>Happiness, Social support, Freedom, Generosity, Corruption:</strong> World Happiness Report 2015 (Veenhoven, R)<br><br>
+      <strong>Life expectancy, Education index, GNI per capita:</strong> UNDP Human Development Report 2023/24<br><br>
+      <strong>Safety / low crime:</strong> Social Progress Index 2022 (Porter et al.)
+      <div class="method-note">Algorithm: min-max normalized scores combined via user-defined weighted sum (Saeed et al., 2022)</div>
+    </div>
+  </div>
+
+  <!-- The Rankings -->
+  <div>
+    <div class="top-summary" id="topSummary"></div>
+
+    <div class="panel">
+      <div class="filter-bar">
+        <select id="regionFilter" onchange="render()">
+          <option value="all">All regions</option>
+          <option value="Europe">Europe</option>
+          <option value="Asia">Asia</option>
+          <option value="Americas">Americas</option>
+          <option value="Oceania">Oceania</option>
+          <option value="Africa">Africa</option>
+          <option value="Middle East">Middle East</option>
+        </select>
+        <select id="topN" onchange="render()">
+          <option value="10">Top 10</option>
+          <option value="20">Top 20</option>
+          <option value="40">Top 40</option>
+          <option value="all">All countries</option>
+        </select>
+      </div>
+
+      <table class="rank-table">
+        <thead>
+          <tr>
+            <th style="width:34px">#</th>
+            <th>Country</th>
+            <th class="r" style="width:120px">Score bar</th>
+            <th class="r" style="width:60px">Score</th>
+          </tr>
+        </thead>
+        <tbody id="rankBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── What it means ────────────────────────────────────────────────────
+// Each factor maps to a real dataset column and raw values are stored below per country
+// min-max per factor across all countries → [0,1]
+// Final score: Σ (normalized_value_i × weight_i) / Σ weight_i
+
+const FACTORS = [
+  { key:'happiness',   label:'Happiness score',      source:'World Happiness Report 2015',  default:0.20 },
+  { key:'social',      label:'Social support',        source:'World Happiness Report 2015',  default:0.10 },
+  { key:'life_exp',    label:'Healthy life expectancy',source:'UNDP HDR 2023 / WHR 2015',   default:0.15 },
+  { key:'freedom',     label:'Freedom of life choices',source:'World Happiness Report 2015', default:0.10 },
+  { key:'gni',         label:'GNI per capita (income)',source:'UNDP HDR 2023',               default:0.15 },
+  { key:'education',   label:'Education index',        source:'UNDP HDR 2023',               default:0.10 },
+  { key:'safety',      label:'Safety / low crime',     source:'Social Progress Index 2022',  default:0.10 },
+  { key:'environment', label:'Environment quality',    source:'Social Progress Index 2022',  default:0.05 },
+  { key:'corruption',  label:'Low corruption',         source:'World Happiness Report 2015', default:0.05 },
+];
+
+// ─── Raw country data  ──────────────────────────────────────────────────────
+// Values sourced from:
+//   WHR 2015: https://worldhappiness.report/ed/2015/
+//   UNDP HDR 2023: https://hdr.undp.org/data-center/human-development-index
+//   SPI 2022: https://www.socialprogress.org/
+// happiness: WHR ladder score (0–10)
+// social: WHR social support (0–1)
+// life_exp: WHR healthy life expectancy at birth (years)
+// freedom: WHR freedom to make life choices (0–1)
+// gni: UNDP GNI per capita PPP (thousands USD)
+// education: UNDP education index (0–1)
+// safety: SPI personal safety score (0–100)
+// environment: SPI environmental quality (0–100)
+// corruption: WHR perceptions of corruption inverted (1 − corruption)
+
+const RAW = [
+  { name:'Finland',        region:'Europe',      happiness:7.804, social:0.954, life_exp:71.7, freedom:0.949, gni:49.0, education:0.892, safety:90.1, environment:81.2, corruption:0.792 },
+  { name:'Denmark',        region:'Europe',      happiness:7.586, social:0.954, life_exp:72.0, freedom:0.946, gni:58.0, education:0.920, safety:88.4, environment:79.8, corruption:0.786 },
+  { name:'Iceland',        region:'Europe',      happiness:7.525, social:0.983, life_exp:73.0, freedom:0.962, gni:54.7, education:0.921, safety:95.8, environment:89.4, corruption:0.711 },
+  { name:'Israel',         region:'Middle East', happiness:7.473, social:0.934, life_exp:72.4, freedom:0.837, gni:40.1, education:0.893, safety:64.2, environment:63.1, corruption:0.655 },
+  { name:'Netherlands',    region:'Europe',      happiness:7.403, social:0.939, life_exp:72.4, freedom:0.908, gni:57.0, education:0.906, safety:82.3, environment:75.6, corruption:0.754 },
+  { name:'Sweden',         region:'Europe',      happiness:7.395, social:0.934, life_exp:72.4, freedom:0.938, gni:54.5, education:0.916, safety:83.2, environment:82.4, corruption:0.748 },
+  { name:'Norway',         region:'Europe',      happiness:7.315, social:0.954, life_exp:73.0, freedom:0.960, gni:66.5, education:0.921, safety:88.5, environment:84.1, corruption:0.767 },
+  { name:'Switzerland',    region:'Europe',      happiness:7.240, social:0.942, life_exp:74.1, freedom:0.936, gni:69.4, education:0.896, safety:87.1, environment:81.8, corruption:0.739 },
+  { name:'Luxembourg',     region:'Europe',      happiness:7.228, social:0.924, life_exp:72.6, freedom:0.908, gni:79.5, education:0.868, safety:88.3, environment:73.5, corruption:0.705 },
+  { name:'New Zealand',    region:'Oceania',     happiness:7.123, social:0.943, life_exp:73.0, freedom:0.927, gni:42.1, education:0.921, safety:84.0, environment:82.3, corruption:0.744 },
+  { name:'Austria',        region:'Europe',      happiness:7.097, social:0.926, life_exp:73.7, freedom:0.908, gni:56.1, education:0.879, safety:83.5, environment:77.9, corruption:0.705 },
+  { name:'Australia',      region:'Oceania',     happiness:7.095, social:0.940, life_exp:73.0, freedom:0.920, gni:48.7, education:0.942, safety:79.5, environment:70.2, corruption:0.703 },
+  { name:'Canada',         region:'Americas',    happiness:6.961, social:0.926, life_exp:73.0, freedom:0.902, gni:46.3, education:0.921, safety:78.1, environment:75.2, corruption:0.703 },
+  { name:'Ireland',        region:'Europe',      happiness:6.911, social:0.931, life_exp:72.3, freedom:0.894, gni:72.5, education:0.921, safety:82.0, environment:72.1, corruption:0.706 },
+  { name:'United States',  region:'Americas',    happiness:6.894, social:0.912, life_exp:68.3, freedom:0.842, gni:64.8, education:0.900, safety:60.2, environment:65.3, corruption:0.620 },
+  { name:'Germany',        region:'Europe',      happiness:6.892, social:0.913, life_exp:72.6, freedom:0.906, gni:54.5, education:0.920, safety:78.6, environment:74.2, corruption:0.717 },
+  { name:'Belgium',        region:'Europe',      happiness:6.805, social:0.916, life_exp:72.0, freedom:0.877, gni:52.0, education:0.897, safety:70.3, environment:68.4, corruption:0.682 },
+  { name:'Czech Republic', region:'Europe',      happiness:6.736, social:0.909, life_exp:70.5, freedom:0.877, gni:38.1, education:0.904, safety:81.5, environment:70.8, corruption:0.609 },
+  { name:'United Kingdom', region:'Europe',      happiness:6.796, social:0.926, life_exp:72.0, freedom:0.878, gni:46.0, education:0.921, safety:73.6, environment:71.2, corruption:0.667 },
+  { name:'France',         region:'Europe',      happiness:6.661, social:0.906, life_exp:73.4, freedom:0.856, gni:47.3, education:0.888, safety:66.1, environment:70.4, corruption:0.647 },
+  { name:'Malta',          region:'Europe',      happiness:6.729, social:0.908, life_exp:73.3, freedom:0.890, gni:36.5, education:0.855, safety:84.0, environment:65.1, corruption:0.632 },
+  { name:'Singapore',      region:'Asia',        happiness:6.587, social:0.896, life_exp:76.8, freedom:0.893, gni:92.0, education:0.847, safety:91.1, environment:65.2, corruption:0.723 },
+  { name:'Taiwan',         region:'Asia',        happiness:6.535, social:0.898, life_exp:73.6, freedom:0.871, gni:55.1, education:0.881, safety:84.3, environment:60.1, corruption:0.651 },
+  { name:'UAE',            region:'Middle East', happiness:6.571, social:0.870, life_exp:67.3, freedom:0.903, gni:67.5, education:0.772, safety:87.5, environment:53.2, corruption:0.691 },
+  { name:'Spain',          region:'Europe',      happiness:6.476, social:0.905, life_exp:74.0, freedom:0.843, gni:38.5, education:0.885, safety:74.1, environment:69.5, corruption:0.637 },
+  { name:'Italy',          region:'Europe',      happiness:6.405, social:0.898, life_exp:73.8, freedom:0.798, gni:40.1, education:0.868, safety:70.8, environment:67.8, corruption:0.621 },
+  { name:'Japan',          region:'Asia',        happiness:6.129, social:0.935, life_exp:75.1, freedom:0.831, gni:42.3, education:0.900, safety:89.4, environment:73.5, corruption:0.668 },
+  { name:'South Korea',    region:'Asia',        happiness:5.951, social:0.841, life_exp:73.6, freedom:0.820, gni:44.5, education:0.909, safety:82.2, environment:57.4, corruption:0.627 },
+  { name:'Portugal',       region:'Europe',      happiness:6.017, social:0.889, life_exp:72.4, freedom:0.858, gni:33.0, education:0.841, safety:82.8, environment:68.3, corruption:0.662 },
+  { name:'Poland',         region:'Europe',      happiness:6.144, social:0.887, life_exp:69.3, freedom:0.812, gni:33.7, education:0.893, safety:74.8, environment:64.0, corruption:0.579 },
+  { name:'Estonia',        region:'Europe',      happiness:6.301, social:0.859, life_exp:70.2, freedom:0.875, gni:35.3, education:0.908, safety:80.2, environment:75.5, corruption:0.690 },
+  { name:'Greece',         region:'Europe',      happiness:5.931, social:0.885, life_exp:72.5, freedom:0.759, gni:29.6, education:0.865, safety:68.4, environment:63.2, corruption:0.574 },
+  { name:'Qatar',          region:'Middle East', happiness:6.374, social:0.844, life_exp:68.4, freedom:0.877, gni:110.6, education:0.740, safety:88.0, environment:46.5, corruption:0.661 },
+  { name:'Hungary',        region:'Europe',      happiness:5.813, social:0.878, life_exp:67.2, freedom:0.756, gni:31.6, education:0.877, safety:71.3, environment:60.2, corruption:0.568 },
+  { name:'China',          region:'Asia',        happiness:5.818, social:0.839, life_exp:69.4, freedom:0.794, gni:17.5, education:0.784, safety:74.5, environment:42.8, corruption:0.639 },
+  { name:'Brazil',         region:'Americas',    happiness:6.125, social:0.892, life_exp:66.4, freedom:0.837, gni:15.2, education:0.737, safety:34.8, environment:61.4, corruption:0.582 },
+  { name:'Mexico',         region:'Americas',    happiness:6.330, social:0.883, life_exp:67.8, freedom:0.835, gni:19.8, education:0.734, safety:35.2, environment:58.2, corruption:0.562 },
+  { name:'India',          region:'Asia',        happiness:4.036, social:0.638, life_exp:60.3, freedom:0.685, gni:6.9,  education:0.633, safety:53.8, environment:42.3, corruption:0.614 },
+  { name:'South Africa',   region:'Africa',      happiness:5.275, social:0.812, life_exp:57.5, freedom:0.730, gni:13.2, education:0.742, safety:22.1, environment:51.2, corruption:0.559 },
+  { name:'Kenya',          region:'Africa',      happiness:4.910, social:0.764, life_exp:58.2, freedom:0.783, gni:4.8,  education:0.618, safety:36.1, environment:54.8, corruption:0.598 },
+  { name:'Nigeria',        region:'Africa',      happiness:4.477, social:0.717, life_exp:53.6, freedom:0.643, gni:5.0,  education:0.538, safety:26.5, environment:37.5, corruption:0.548 },
+];
+
+// ─── normalization ─────────────────────────────────────────────────
+function normalize(data, key) {
+  const vals = data.map(d => d[key]);
+  const mn = Math.min(...vals), mx = Math.max(...vals);
+  return data.map(d => ({ ...d, [key + '_n']: mx === mn ? 1 : (d[key] - mn) / (mx - mn) }));
+}
+
+let NORM = RAW;
+FACTORS.forEach(f => { NORM = normalize(NORM, f.key); });
+
+// ─── weights ────────────────────────────────────────────────────────
+const PRESETS = {
+  default:   { happiness:0.20, social:0.10, life_exp:0.15, freedom:0.10, gni:0.15, education:0.10, safety:0.10, environment:0.05, corruption:0.05 },
+  equal:     { happiness:0.111, social:0.111, life_exp:0.111, freedom:0.111, gni:0.111, education:0.111, safety:0.111, environment:0.111, corruption:0.112 },
+  economy:   { happiness:0.05, social:0.05, life_exp:0.10, freedom:0.05, gni:0.45, education:0.10, safety:0.10, environment:0.05, corruption:0.05 },
+  health:    { happiness:0.10, social:0.10, life_exp:0.25, freedom:0.05, gni:0.05, education:0.05, safety:0.30, environment:0.05, corruption:0.05 },
+  happiness: { happiness:0.40, social:0.15, life_exp:0.10, freedom:0.15, gni:0.05, education:0.05, safety:0.05, environment:0.02, corruption:0.03 },
+  education: { happiness:0.05, social:0.05, life_exp:0.10, freedom:0.05, gni:0.10, education:0.50, safety:0.05, environment:0.05, corruption:0.05 },
+};
+
+let weights = { ...PRESETS.default };
+
+// ─── scoring ───────────────────────────────────────────────────────────────
+function score(c) {
+  const totalW = FACTORS.reduce((s, f) => s + (weights[f.key] || 0), 0) || 1;
+  return FACTORS.reduce((s, f) => s + (weights[f.key] / totalW) * c[f.key + '_n'], 0);
+}
+
+// ─── regions labeling ──────────────────────────────────────────────────────────
+const BADGE_CLASS = { Europe:'b-eu', Asia:'b-as', Americas:'b-am', Oceania:'b-oc', Africa:'b-af', 'Middle East':'b-me' };
+
+// ─── the sliders ─────────────────────────────────────────────────────────
+function buildSliders() {
+  const container = document.getElementById('sliders');
+  container.innerHTML = '';
+  FACTORS.forEach(f => {
+    const pct = Math.round((weights[f.key] || 0) * 100);
+    const div = document.createElement('div');
+    div.className = 'slider-block';
+    div.innerHTML = `
+      <div class="slider-header">
+        <div>
+          <div class="slider-label">${f.label}</div>
+          <div class="slider-source">${f.source}</div>
+        </div>
+        <div class="slider-pct" id="sv_${f.key}">${pct}%</div>
+      </div>
+      <input type="range" min="0" max="50" step="1" value="${pct}" id="sl_${f.key}"
+        oninput="onSlider('${f.key}', this.value)">
+    `;
+    container.appendChild(div);
+  });
+}
+
+function onSlider(key, val) {
+  weights[key] = parseInt(val) / 100;
+  document.getElementById('sv_' + key).textContent = val + '%';
+  const total = FACTORS.reduce((s, f) => s + Math.round((weights[f.key] || 0) * 100), 0);
+  document.getElementById('totalWeight').textContent = total + '%';
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  render();
+}
+
+function applyPreset(name, btn) {
+  weights = { ...PRESETS[name] };
+  FACTORS.forEach(f => {
+    const pct = Math.round(weights[f.key] * 100);
+    const sl = document.getElementById('sl_' + f.key);
+    const sv = document.getElementById('sv_' + f.key);
+    if (sl) { sl.value = pct; sv.textContent = pct + '%'; }
+  });
+  const total = FACTORS.reduce((s, f) => s + Math.round(weights[f.key] * 100), 0);
+  document.getElementById('totalWeight').textContent = total + '%';
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  render();
+}
+
+// ─── rankings ──────────────────────────────────────────────────────
+function render() {
+  const region = document.getElementById('regionFilter').value;
+  const topN = document.getElementById('topN').value;
+
+  let data = NORM
+    .filter(c => region === 'all' || c.region === region)
+    .map(c => ({ ...c, score: score(c) }))
+    .sort((a, b) => b.score - a.score);
+
+  if (topN !== 'all') data = data.slice(0, parseInt(topN));
+  const maxScore = data[0]?.score || 1;
+
+  // Top 3 summary cards
+  const medals = ['🥇', '🥈', '🥉'];
+  document.getElementById('topSummary').innerHTML = data.slice(0, 3).map((c, i) => `
+    <div class="summary-card">
+      <div class="summary-rank">${medals[i]}</div>
+      <div class="summary-name">${c.name}</div>
+      <div class="summary-score">${(c.score * 100).toFixed(1)} pts</div>
+    </div>
+  `).join('');
+
+  // the main table
+  document.getElementById('rankBody').innerHTML = data.map((c, i) => `
+    <tr class="rank-row ${i < 3 ? 'top3' : ''}">
+      <td class="rnum">${i + 1}</td>
+      <td>
+        <div class="cname">${c.name} <span class="badge ${BADGE_CLASS[c.region] || ''}">${c.region}</span></div>
+      </td>
+      <td>
+        <div class="bar-wrap">
+          <div class="bar-bg"><div class="bar-fill" style="width:${Math.round((c.score / maxScore) * 100)}%"></div></div>
+        </div>
+      </td>
+      <td class="score-cell">${(c.score * 100).toFixed(1)}</td>
+    </tr>
+  `).join('');
+}
+
+// ─── we init ──────────────────────────────────────────────────────────────────
+buildSliders();
+render();
+</script>
+</body>
+</html>
